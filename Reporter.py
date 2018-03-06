@@ -79,8 +79,16 @@ class Reporter(Thread):
         content = ''
         for key in self.report:
             if key is 'articles':
+                content += 'Articles:\n'
+                for article_url in self.report['articles']:
+                    content += article_url + ":\n"
+                    content += 'Score: ' + self.report['articles'][article_url][0] + \
+                               "\nWeight: " + self.report['articles'][article_url][1]
+                    content += '\n'
                 continue
+            content += key + ': '
             content += str(self.report[key])
+            content += '\n'
         file.write(content)
 
     def run(self):
