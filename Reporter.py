@@ -82,8 +82,8 @@ class Reporter(Thread):
                 content += 'Articles:\n'
                 for article_url in self.report['articles']:
                     content += article_url + ":\n"
-                    content += 'Score: ' + self.report['articles'][article_url][0] + \
-                               "\nWeight: " + self.report['articles'][article_url][1]
+                    content += 'Score: ' + str(self.report['articles'][article_url][0]) + \
+                               "\nWeight: " + str(self.report['articles'][article_url][1])
                     content += '\n'
                 continue
             content += key + ': '
