@@ -3,12 +3,16 @@ from selenium import webdriver
 from threading import Thread
 import bs4
 import stringhelper
+
+
 class Scraper(Thread):
-    report = ()
+
     def __init__(self, company_tuple):
         Thread.__init__(self)
+        self.scrape_results = ()
         self.driver = None
         self.company_strings = company_tuple
+        self.driver_done = False
 
     def get_bs(self):
         page_source = self.driver.page_source
@@ -56,7 +60,7 @@ class Scraper(Thread):
                                                                                                  ) + "&tbm=nws")
         page_string = 2
         article_dict = {}
-        for i in range(4):
+        for i in range(3):
             bs = self.get_bs()
             url_tag_list = bs.find_all('h3', attrs={'class': 'r _gJs'})
             summary_tag_list = bs.find_all('div', attrs={'class': 'st'})
@@ -100,18 +104,11 @@ class Scraper(Thread):
             delta = -delta
             percentage = -percentage
 
-        pre_article_lookup_dict = self.get_url_dict()
+        pre_lookup_article_dict = self.get_url_dict()
         self.driver.close()
-        article_dict = self.get_articles(pre_article_lookup_dict)
-        self.report = (article_dict, price, delta, percentage)
+        self.driver_done = True
+        article_dict = self.get_articles(pre_lookup_article_dict)
+        self.scrape_results = (article_dict, price, delta, percentage)
 
-    def get_report(self):
-        return self.report
-sc = Scraper(['VNET', 'IBM'])
-sc.start()
-while sc.is_alive():
-    print("sup Bits")
-    pass
-temp = sc.get_report()
-for url in temp[0]:
-    print(url + ": " + temp[0][url][2])
+    def get_scrape_results(self):
+        return self.scrape_results
