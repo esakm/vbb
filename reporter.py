@@ -8,7 +8,7 @@ class Reporter(Thread):
         Thread.__init__(self)
         self._scraper = scraper.Scraper((company[0], company[1]))
 
-        self._parser = article_parser.Parser(company[1])
+        self._parser = article_parser.Parser(self._scraper.company_name)
         self._company = company
         self._scraper_results = ()
         self.report = {}

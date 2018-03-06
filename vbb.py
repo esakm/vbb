@@ -14,15 +14,15 @@ for company in company_list:
 
 for i in range(5):
     t_list[i].start()
-    time.sleep(3)
-counter = len(t_list) - 1
+
+counter = 5
+list_len = len(t_list)
+
 while not report_done:
-    if counter == 5:
+    if counter == list_len:
         report_done = True
         continue
-    for thread in t_list:
-        if thread.driver_done:
-            t_list[counter].start()
-            counter -= 1
-            break
-    time.sleep(7)
+    if t_list[counter].driver_done:
+        counter += 1
+        t_list[counter].start()
+    time.sleep(4)

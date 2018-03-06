@@ -13,6 +13,7 @@ class Scraper(Thread):
         self.driver = None
         self.company_strings = company_tuple
         self.driver_done = False
+        self.company_name = stringhelper.prepare_for_news_search(self.company_strings[1])
 
     def get_bs(self):
         page_source = self.driver.page_source
@@ -56,11 +57,10 @@ class Scraper(Thread):
         button.click()
 
     def get_url_dict(self):
-        self.driver.get("https://www.google.ca/search?q=" + stringhelper.prepare_for_news_search(self.company_strings[1]
-                                                                                                 ) + "&tbm=nws")
+        self.driver.get("https://www.google.ca/search?q=" + self.company_name + "&tbm=nws")
         page_string = 2
         article_dict = {}
-        for i in range(4):
+        for i in range(2):
             bs = self.get_bs()
             url_tag_list = bs.find_all('h3', attrs={'class': 'r _gJs'})
             summary_tag_list = bs.find_all('div', attrs={'class': 'st'})
