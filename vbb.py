@@ -1,4 +1,4 @@
-import Reporter
+import reporter
 import csv
 import time
 company_file = open('NASDAQ.csv')
@@ -9,7 +9,7 @@ count = 0
 report_done = False
 for company in company_list:
     if company[5] == 'Technology':
-        r = Reporter.Reporter(company)
+        r = reporter.Reporter(company)
         t_list.append(r)
 
 for i in range(5):

@@ -1,14 +1,14 @@
-import Scraper
-import Parser
+import scraper
+import parser
 from threading import Thread
 
 class Reporter(Thread):
 
     def __init__(self, company):
         Thread.__init__(self)
-        self._scraper = Scraper.Scraper((company[0], company[1]))
+        self._scraper = scraper.Scraper((company[0], company[1]))
 
-        self._parser = Parser.Parser(company[1])
+        self._parser = parser.Parser(company[1])
         self._company = company
         self._scraper_results = ()
         self.report = {}

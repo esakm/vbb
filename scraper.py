@@ -60,7 +60,7 @@ class Scraper(Thread):
                                                                                                  ) + "&tbm=nws")
         page_string = 2
         article_dict = {}
-        for i in range(3):
+        for i in range(4):
             bs = self.get_bs()
             url_tag_list = bs.find_all('h3', attrs={'class': 'r _gJs'})
             summary_tag_list = bs.find_all('div', attrs={'class': 'st'})
