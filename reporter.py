@@ -50,7 +50,7 @@ class Reporter(Thread):
             article_score = (title_score + summary_score) + (title_score + summary_score)/article_weight
 
             collective_score += article_score
-            self.report['articles'][article_url] = [article_score, article_weight]
+            self.report['articles'][article_url] = (article_score, article_weight)
         self.report['total-score'] = collective_score
 
     def calculate_score(self):
@@ -74,7 +74,7 @@ class Reporter(Thread):
         self.report['final-score'] = final_score
 
     def dump_report(self):
-        file_name = '{}{}-{}'.format('reports//', self._company[1], self.report['final-score'])
+        file_name = '{}{}-{}'.format('reports//', self.report['final-score'], self._company[1])
         file = open(file_name, 'w')
         content = ''
         for key in self.report:
