@@ -29,24 +29,25 @@ class Scraper(Thread):
     def get_closing_price(self):
         self.driver.get("https://www.google.ca/search?q=NASDAQ:" + self.company_strings[0])
         bs = self.get_bs()
-
-        price = bs.find('span', attrs={'class': '_Rnb fmob_pr fac-l'}).getText().replace(',', '')
-
+        try:
+            price = bs.find('span', attrs={'class': '_Rnb fmob_pr fac-l'}).getText().replace(',', '')
+        except Exception as e:
+            return 1
         return float(price)
 
     def get_price_change(self):
         bs = self.get_bs()
-
-        delta = bs.find('span', attrs={'class': 'fac-cc'}).getText().split(' ')[0]
-        percentage = bs.find('span', attrs={'class': 'fac-cc'}).getText().split(' ')[1]\
-            .replace('%', '').replace('(', '').replace(')', '')
-
+        try:
+            delta = bs.find('span', attrs={'class': 'fac-cc'}).getText().split(' ')[0]
+            percentage = bs.find('span', attrs={'class': 'fac-cc'}).getText().split(' ')[1]\
+                .replace('%', '').replace('(', '').replace(')', '')
+        except Exception as e:
+            return 1, 1
         return float(delta), float(percentage)
 
     def is_price_up(self):
         bs = self.get_bs()
         direction = bs.findAll('span', attrs={'class': '_Mnb vk-fin-dn finance_answer_card__apc fac-c'})
-
         if direction is None:
             return True
         else:
@@ -60,7 +61,7 @@ class Scraper(Thread):
         self.driver.get("https://www.google.ca/search?q=" + self.company_name + "&tbm=nws")
         page_string = 2
         article_dict = {}
-        for i in range(2):
+        for i in range(3):
             bs = self.get_bs()
             url_tag_list = bs.find_all('h3', attrs={'class': 'r _gJs'})
             summary_tag_list = bs.find_all('div', attrs={'class': 'st'})
@@ -99,13 +100,15 @@ class Scraper(Thread):
     def run(self):
         self.initialize_driver()
         price = self.get_closing_price()
-        (delta, percentage) = self.get_price_change()
+        price_change = self.get_price_change()
+        delta = price_change[0]
+        percentage = price_change[1]
         if not self.is_price_up():
             delta = -delta
             percentage = -percentage
 
         pre_lookup_article_dict = self.get_url_dict()
-        self.driver.close()
+        self.close_driver()
         self.driver_done = True
         article_dict = self.get_articles(pre_lookup_article_dict)
         self.scrape_results = (article_dict, price, delta, percentage)

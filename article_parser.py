@@ -1,3 +1,4 @@
+from datetime import date
 
 
 class Parser:
@@ -15,12 +16,17 @@ class Parser:
         self.company_name = name
 
     def switch_articles(self, new_article):
-        self.string_to_parse = new_article.lower()
+        self.string_to_parse = new_article
+        self.string_to_parse[0] = self.string_to_parse[0].lower()
+        self.string_to_parse[2] = self.string_to_parse[2].lower()
 
     def count_good_keywords(self):
         count = 0
         for keyword in self.good_keywords:
-            count += self.string_to_parse.count(keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[0].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[2].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
 
         if count == 0:
             return 1
@@ -30,7 +36,10 @@ class Parser:
     def count_bad_keywords(self):
         count = 0
         for keyword in self.bad_keywords:
-            count += self.string_to_parse.count(keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[0].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[2].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
 
         if count == 0:
             return 1
@@ -40,7 +49,10 @@ class Parser:
     def count_op_keywords(self):
         count = 0
         for keyword in self.optimistic_keywords:
-            count += self.string_to_parse.count(keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[0].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[2].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
         if count == 0:
             return 1
         else:
@@ -49,9 +61,36 @@ class Parser:
     def count_pe_keywords(self):
         count = 0
         for keyword in self.pessimistic_keywords:
-            count += self.string_to_parse.count(keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
-
+            count += self.string_to_parse[0].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
+            count += self.string_to_parse[2].count(
+                keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
         if count == 0:
             return 1
         else:
             return count
+
+    def parse_date(self):
+        article_date = self.string_to_parse[1].split(' ')
+        if 'hour' in article_date[1] or 'hours' in article_date[1]:
+            return int(article_date[0])
+        elif 'minute' in article_date[1] or 'minutes' in article_date[1]:
+            return int(article_date[0])/10
+        else:
+            month_list = {'Jan.': 1,
+                          'Feb.': 2,
+                          'Mar.': 3,
+                          'Apr.': 4,
+                          'May': 5,
+                          'Jun.': 6,
+                          'Jul.': 7,
+                          'Aug.': 8,
+                          'Sep.': 9,
+                          'Oct.': 10,
+                          'Nov.': 11,
+                          'Dec.': 12}
+            ar_date = date(int(article_date[2]), month_list[article_date[0]],
+                           int(article_date[1].replace(',', '')))
+            current_date = date.today()
+            delta = current_date - ar_date
+            return int(delta.days) * 24
