@@ -53,15 +53,11 @@ class Reporter(Thread):
 
     def calculate_score(self):
         if 'B' in self._company[3]:
-            company_weight = 10
-        elif 'M' in self._company[3] and float(self._company[3].replace('$', '').replace('M', '')) > 750:
-            company_weight = 7.5
-        elif 'M' in self._company[3] and float(self._company[3].replace('$', '').replace('M', '')) > 500:
-            company_weight = 5
-        elif 'M' in self._company[3] and float(self._company[3].replace('$', '').replace('M', '')) > 250:
-            company_weight = 2.5
+            company_weight = float(self._company[3].replace('$', '').replace('B', '')) * 100
+        elif 'M' in self._company[3]:
+            company_weight = float(self._company[3].replace('$', '').replace('M', '')) * 10
         else:
-            company_weight = 1
+            company_weight = float(self._company[3].replace('$', ''))/1000
         if 'n/a' not in self._company[4]:
             company_weight += 2018 - int(self._company[4])
 
@@ -69,13 +65,14 @@ class Reporter(Thread):
         delta = self._scraper_results[2]
         percentage = self._scraper_results[3]
         article_total_score = self.report['total-score']
+        company_weight /= price
         op = self.report['op-count']
         pe = self.report['pe-count']
         op_pe = op + pe
         prelim_score = 0
         prelim_score += op/op_pe * 1000
         prelim_score -= pe/op_pe * 1000
-        final_score = ((prelim_score + article_total_score) + ((percentage * 100)/(price + delta))) * company_weight
+        final_score = ((prelim_score + article_total_score) * company_weight + (percentage * 100 + delta))
 
         self.report['final-score'] = final_score
         self.report['price'] = price
