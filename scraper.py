@@ -27,7 +27,7 @@ class Scraper(Thread):
         self.driver.close()
 
     def get_closing_price(self):
-        self.driver.get("https://www.google.ca/search?q=NASDAQ:" + self.company_strings[0])
+        self.driver.get("https://www.google.com/search?q=NASDAQ:" + self.company_strings[0])
         bs = self.get_bs()
         try:
             price = bs.find('span', attrs={'class': '_Rnb fmob_pr fac-l'}).getText().replace(',', '')
@@ -58,7 +58,7 @@ class Scraper(Thread):
         button.click()
 
     def get_url_dict(self):
-        self.driver.get("https://www.google.ca/search?q=" + self.company_name + "&tbm=nws")
+        self.driver.get("https://www.google.com/search?q=" + self.company_name + "&tbm=nws")
         page_string = 2
         article_dict = {}
         for i in range(3):

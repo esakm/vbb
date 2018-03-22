@@ -57,7 +57,7 @@ class Reporter(Thread):
         elif 'M' in self._company[3]:
             company_weight = float(self._company[3].replace('$', '').replace('M', '')) * 10
         else:
-            company_weight = float(self._company[3].replace('$', ''))/1000
+            company_weight = float(self._company[3].replace('$', ''))/100
         if 'n/a' not in self._company[4]:
             company_weight += 2018 - int(self._company[4])
 
@@ -108,7 +108,6 @@ class Reporter(Thread):
         while self._scraper.is_alive():
             pass
         self.get_scrape_report()
-        del self._scraper
         self.parse_articles()
         self.calculate_score()
         self.dump_report()

@@ -1,5 +1,18 @@
 from datetime import date
 
+month_list = {'Jan.': 1,
+                          'Feb.': 2,
+                          'Mar.': 3,
+                          'Apr.': 4,
+                          'May': 5,
+                          'Jun.': 6,
+                          'Jul.': 7,
+                          'Aug.': 8,
+                          'Sep.': 9,
+                          'Oct.': 10,
+                          'Nov.': 11,
+                          'Dec.': 12}
+
 
 class Parser:
     bad_keyword_file = open('keywords\\bad_keywords.txt')
@@ -77,18 +90,6 @@ class Parser:
         elif 'minute' in article_date[1] or 'minutes' in article_date[1]:
             return int(article_date[0])/10
         else:
-            month_list = {'Jan.': 1,
-                          'Feb.': 2,
-                          'Mar.': 3,
-                          'Apr.': 4,
-                          'May': 5,
-                          'Jun.': 6,
-                          'Jul.': 7,
-                          'Aug.': 8,
-                          'Sep.': 9,
-                          'Oct.': 10,
-                          'Nov.': 11,
-                          'Dec.': 12}
             ar_date = date(int(article_date[2]), month_list[article_date[0]],
                            int(article_date[1].replace(',', '')))
             current_date = date.today()
