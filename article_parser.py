@@ -40,9 +40,6 @@ class Parser:
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
             count += self.string_to_parse[2].count(
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
-
-        if count == 0:
-            return 1
         else:
             return count
 
@@ -53,9 +50,6 @@ class Parser:
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
             count += self.string_to_parse[2].count(
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
-
-        if count == 0:
-            return 1
         else:
             return count
 
@@ -66,8 +60,6 @@ class Parser:
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
             count += self.string_to_parse[2].count(
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
-        if count == 0:
-            return 1
         else:
             return count
 
@@ -78,8 +70,6 @@ class Parser:
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
             count += self.string_to_parse[2].count(
                 keyword.replace('\n', '').replace(r'"company"', self.company_name).lower())
-        if count == 0:
-            return 1
         else:
             return count
 
